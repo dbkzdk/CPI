@@ -1,0 +1,1 @@
+{"name":"pci-panel-critical-info","private":true,"type":"module","scripts":{"dev":"nuxt dev","build":"nuxt build","preview":"nuxt preview","seed":"node scripts/seed.mjs"},"dependencies":{"@nuxtjs/tailwindcss":"^6.14.0","better-sqlite3":"^11.8.1","bcryptjs":"^2.4.3","jose":"^6.0.8","nanoid":"^5.1.2","nuxt":"^4.1.2","nodemailer":"^7.0.3","zod":"^3.24.2"},"devDependencies":{}}

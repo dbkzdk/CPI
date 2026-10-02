@@ -1,0 +1,1 @@
+import {z} from 'zod';export default defineEventHandler(async e=>{const u=await requireUser(e),id=getRouterParam(e,'id'),{body}=await readValidatedBody(e,z.object({body:z.string().min(1).max(1000)}).parse);useDb().prepare('INSERT INTO comments(card_id,user_id,body) VALUES(?,?,?)').run(id,u.id,body);return {ok:true}})

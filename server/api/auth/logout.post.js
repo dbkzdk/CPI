@@ -1,0 +1,1 @@
+export default defineEventHandler(e=>{clearSession(e);return {ok:true}})

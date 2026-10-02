@@ -1,0 +1,1 @@
+export default defineEventHandler(async e=>{await requireUser(e,'admin');return {users:useDb().prepare("SELECT id,name,nik,email,phone,company,status FROM users WHERE role='user' ORDER BY name").all()}})

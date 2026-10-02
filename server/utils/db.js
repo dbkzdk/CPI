@@ -1,0 +1,9 @@
+import Database from 'better-sqlite3';import {mkdirSync} from 'node:fs';import {join} from 'node:path';
+let db;export function useDb(){if(db)return db;mkdirSync(join(process.cwd(),'data'),{recursive:true});db=new Database(join(process.cwd(),'data','pci.db'));db.pragma('journal_mode = WAL');db.pragma('foreign_keys = ON');migrate(db);return db}
+function migrate(d){d.exec(`CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,nik TEXT UNIQUE NOT NULL,email TEXT UNIQUE NOT NULL,company TEXT,phone TEXT,instagram TEXT,password_hash TEXT NOT NULL,role TEXT NOT NULL DEFAULT 'user',status TEXT NOT NULL DEFAULT 'pending',created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS cards(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT NOT NULL,body TEXT NOT NULL,attachment_url TEXT,passing_score INTEGER DEFAULT 80,author_id INTEGER,created_at TEXT DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(author_id) REFERENCES users(id));
+CREATE TABLE IF NOT EXISTS card_targets(card_id INTEGER,user_id INTEGER,read_at TEXT,done_at TEXT,best_score INTEGER DEFAULT 0,attempts INTEGER DEFAULT 0,PRIMARY KEY(card_id,user_id),FOREIGN KEY(card_id) REFERENCES cards(id),FOREIGN KEY(user_id) REFERENCES users(id));
+CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT,card_id INTEGER,question TEXT,options_json TEXT,correct_index INTEGER,FOREIGN KEY(card_id) REFERENCES cards(id));
+CREATE TABLE IF NOT EXISTS comments(id INTEGER PRIMARY KEY AUTOINCREMENT,card_id INTEGER,user_id INTEGER,body TEXT,created_at TEXT DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(card_id) REFERENCES cards(id),FOREIGN KEY(user_id) REFERENCES users(id));
+CREATE TABLE IF NOT EXISTS password_resets(token_hash TEXT PRIMARY KEY,user_id INTEGER,expires_at TEXT,used_at TEXT);
+CREATE TABLE IF NOT EXISTS audit_logs(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,action TEXT,ip TEXT,created_at TEXT DEFAULT CURRENT_TIMESTAMP);`)}

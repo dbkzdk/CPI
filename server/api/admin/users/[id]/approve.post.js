@@ -1,0 +1,1 @@
+export default defineEventHandler(async e=>{await requireUser(e,'admin');useDb().prepare("UPDATE users SET status='active' WHERE id=? AND role='user'").run(getRouterParam(e,'id'));return {ok:true}})

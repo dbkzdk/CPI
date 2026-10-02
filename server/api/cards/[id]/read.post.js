@@ -1,0 +1,1 @@
+export default defineEventHandler(async e=>{const u=await requireUser(e),id=getRouterParam(e,'id');if(u.role==='user')useDb().prepare('UPDATE card_targets SET read_at=COALESCE(read_at,CURRENT_TIMESTAMP) WHERE card_id=? AND user_id=?').run(id,u.id);return {ok:true}})
